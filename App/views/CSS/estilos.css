@@ -1,0 +1,30 @@
+body,html{
+    height: 100%;
+    width: 100%;
+}
+/* login y 404 estilos */
+.main-container{
+height: 100%;
+width: 100%;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+/* lohin y el hero es de 404 */
+.main-container >.login,
+.main-container >.hero-body{
+    height: auto;
+    width: 100%;
+    max-width: 400px;
+    min-width: 300px;
+    
+}
+
+#password-requirements {
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 5px;
+    font-size: 0.9rem;
+}
