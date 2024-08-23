@@ -26,7 +26,7 @@ Bienvenido al **Sistema de Gestión de Usuarios**, una aplicación web robusta q
 
 1. **Clona el repositorio**:
     ```bash
-    git clone https://github.com/usuario/repo-gestion-usuarios.git
+    git clone [https://github.com/usuario/repo-gestion-usuarios.git](https://github.com/ASTUDILLO-Victor/Software.git)
     cd repo-gestion-usuarios
     ```
 
@@ -87,7 +87,7 @@ Este proyecto está licenciado bajo la [MIT License](LICENSE).
 
 ## 📧 Contacto
 
-Si tienes alguna pregunta o sugerencia, no dudes en ponerte en contacto con nosotros a través de [email@example.com](mailto:email@example.com).
+Si tienes alguna pregunta o sugerencia, no dudes en ponerte en contacto con nosotros a través de [astudillo_developer@outlook.com](mailto:astudillo_developer@outlook.com).
 
 ---
 
