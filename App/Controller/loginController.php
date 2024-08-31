@@ -177,7 +177,7 @@ class loginController extends mainModel
                     "condicion_valor"=>$session_token
                 ]
             ];
-            $this->actualizarDatos("sessions",$usuario_datos_up,$condicion);
+            $this->actualizarsession("sessions",$usuario_datos_up,$condicion);
         }
         
         /*

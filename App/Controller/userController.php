@@ -5,30 +5,13 @@ class userController extends mainModel{
 
     /*----------  Controlador registrar usuario  ----------*/
     public function registrarUsuarioControlador(){
-       
-            // Procesa el formulario (por ejemplo, guarda los datos en la base de datos)
         $cedula = strtoupper($this->limpiarCadena($_POST['usuario_cedula']));
         $nombre = strtoupper($this->limpiarCadena($_POST['usuario_nombre']));
         $apellido=strtoupper($this->limpiarCadena($_POST['usuario_apellido']));
-
         $usuario=$this->limpiarCadena($_POST['usuario_usuario']);
         $email=$this->limpiarCadena($_POST['usuario_email']);
         $clave1=$this->limpiarCadena($_POST['usuario_clave_1']);
         $clave2=$this->limpiarCadena($_POST['usuario_clave_2']);
-        
-            // Desactiva la caché para asegurarse de que la redirección no se almacene
-            
-        
-            // Redirige al usuario a una página de agradecimiento o a la misma página
-             // O header("Location: form.html");
-            
-        
-        # Almacenando datos#
-
-        // se envia a liempiar cadena para evitar injec sql 
-       
-
-
         # Verificando campos obligatorios #
         if($cedula=="" or $nombre=="" || $apellido=="" || $usuario=="" || $clave1=="" || $clave2==""){
             $alerta=[
@@ -62,7 +45,6 @@ class userController extends mainModel{
             return json_encode($alerta);
             exit();
         }
-
         if($this->verificarDatos("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{3,40}",$apellido)){
             $alerta=[
                 "tipo"=>"simple",
@@ -73,7 +55,6 @@ class userController extends mainModel{
             return json_encode($alerta);
             exit();
         }
-
         if($this->verificarDatos("[a-zA-Z0-9!@#$&%*()\\-.+,\/]{4,20}",$usuario)){
             $alerta=[
                 "tipo"=>"simple",
@@ -84,7 +65,6 @@ class userController extends mainModel{
             return json_encode($alerta);
             exit();
         }
-
         if($this->verificarDatos("[a-zA-Z0-9!@#$&%*()\\-.+,\/]{7,100}",$clave1) || $this->verificarDatos("[a-zA-Z0-9!@#$&%*()\\-.+,\/]{7,100}",$clave2)){
             $alerta=[
                 "tipo"=>"simple",
@@ -95,10 +75,9 @@ class userController extends mainModel{
             return json_encode($alerta);
             exit();
         }
-
         # Verificando email #
         if($email!=""){
-            if(filter_var($email, FILTER_VALIDATE_EMAIL)){//valida los correos ejectronicos 
+            if(filter_var($email, FILTER_VALIDATE_EMAIL)){//valida los correos electronicos 
                 $check_email=$this->ejecutarConsulta("SELECT email FROM users WHERE email='$email'");
                 if($check_email->rowCount()>0){
                     $alerta=[
@@ -121,7 +100,6 @@ class userController extends mainModel{
                 exit();
             }
         }
-
         # Verificando claves #
         if($clave1!=$clave2){
             $alerta=[
@@ -135,7 +113,6 @@ class userController extends mainModel{
         }else{
             $clave=password_hash($clave1,PASSWORD_BCRYPT,["cost"=>10]);
         }
-
         # Verificando usuario que no se repita en la base de datos #
         $check_usuario=$this->ejecutarConsulta("SELECT username FROM users WHERE username='$usuario'");
         if($check_usuario->rowCount()>0){
@@ -307,121 +284,128 @@ class userController extends mainModel{
 
     }
     /*----------  Controlador listar usuario  ----------*/
-    public function listarUsuarioControlador($pagina,$registros,$url,$busqueda){//parametros a recibir
+    // public function listarUsuarioControlador($pagina,$registros,$url,$busqueda){//parametros a recibir
 
-        $pagina=$this->limpiarCadena($pagina);
-        $registros=$this->limpiarCadena($registros);
+    //     $pagina=$this->limpiarCadena($pagina);
+    //     $registros=$this->limpiarCadena($registros);
 
-        $url=$this->limpiarCadena($url);
-        $url=APP_URL.$url."/";
+    //     $url=$this->limpiarCadena($url);
+    //     $url=APP_URL.$url."/";
 
-        $busqueda=$this->limpiarCadena($busqueda);
-        $tabla="";
+    //     $busqueda=$this->limpiarCadena($busqueda);
+    //     $tabla="";
 
 
          
-        $pagina = (isset($pagina) && $pagina>0) ? (int) $pagina : 1;
-        $inicio = ($pagina>0) ? (($pagina * $registros)-$registros) : 0;
+    //     $pagina = (isset($pagina) && $pagina>0) ? (int) $pagina : 1;
+    //     $inicio = ($pagina>0) ? (($pagina * $registros)-$registros) : 0;
 
-        if(isset($busqueda) && $busqueda!=""){
+    //     if(isset($busqueda) && $busqueda!=""){
 
-            $consulta_datos="SELECT * FROM users WHERE ((id!='".$_SESSION['id']."' AND id!='1') AND (nombre LIKE '%$busqueda%' OR apellido LIKE '%$busqueda%' OR email LIKE '%$busqueda%' OR username LIKE '%$busqueda%')) ORDER BY nombre ASC LIMIT $inicio,$registros";
+    //         $consulta_datos="SELECT * FROM users WHERE ((id!='".$_SESSION['id']."' AND id!='1') AND (nombre LIKE '%$busqueda%' OR apellido LIKE '%$busqueda%' OR email LIKE '%$busqueda%' OR username LIKE '%$busqueda%')) ORDER BY nombre ASC LIMIT $inicio,$registros";
 
-            $consulta_total="SELECT COUNT(id) FROM users WHERE ((id!='".$_SESSION['id']."' AND id!='1') AND (nombre LIKE '%$busqueda%' OR apellido LIKE '%$busqueda%' OR email LIKE '%$busqueda%' OR username LIKE '%$busqueda%'))";
+    //         $consulta_total="SELECT COUNT(id) FROM users WHERE ((id!='".$_SESSION['id']."' AND id!='1') AND (nombre LIKE '%$busqueda%' OR apellido LIKE '%$busqueda%' OR email LIKE '%$busqueda%' OR username LIKE '%$busqueda%'))";
 
-        }else{
+    //     }else{
 
-            $consulta_datos="SELECT * FROM users WHERE id!='".$_SESSION['id']."' AND id!='1' ORDER BY nombre ASC LIMIT $inicio,$registros";
+    //         $consulta_datos="SELECT * FROM users WHERE id!='".$_SESSION['id']."' AND id!='1' ORDER BY nombre ASC LIMIT $inicio,$registros";
 
-            $consulta_total="SELECT COUNT(id) FROM users WHERE id!='".$_SESSION['id']."' AND id!='1'";
+    //         $consulta_total="SELECT COUNT(id) FROM users WHERE id!='".$_SESSION['id']."' AND id!='1'";
 
-        }
+    //     }
 
-        $datos = $this->ejecutarConsulta($consulta_datos);// ejecutamos la consulta
-        $datos = $datos->fetchAll();// la guardamos en array
+    //     $datos = $this->ejecutarConsulta($consulta_datos);// ejecutamos la consulta
+    //     $datos = $datos->fetchAll();// la guardamos en array
 
-        $total = $this->ejecutarConsulta($consulta_total);// ejecutar 
-        $total = (int) $total->fetchColumn();// un array en entero
+    //     $total = $this->ejecutarConsulta($consulta_total);// ejecutar 
+    //     $total = (int) $total->fetchColumn();// un array en entero
 
-        $numeroPaginas =ceil($total/$registros);//total de paginas que va a esatr en la botonera de abajo
-        // agregamos el html de las tablas//
-        $tabla.='
-            <div class="table-container">
-            <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-                <thead>
-                    <tr>
-                        <th class="has-text-centered">#</th>
-                        <th class="has-text-centered">Foto</th>
-                        <th class="has-text-centered">Nombre</th>
-                        <th class="has-text-centered">Usuario</th>
-                        <th class="has-text-centered">Email</th>
-                        <th class="has-text-centered" colspan="3">Opciones</th>
-                    </tr>
-                </thead>
-                <tbody id="tablaDatos">
-        ';
+    //     $numeroPaginas =ceil($total/$registros);//total de paginas que va a esatr en la botonera de abajo
+    //     // agregamos el html de las tablas//
+    //     $tabla.='
+    //         <div class="table-container">
+    //         <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+    //             <thead>
+    //                 <tr>
+    //                     <th class="has-text-centered">#</th>
+    //                     <th class="has-text-centered">Foto</th>
+    //                     <th class="has-text-centered">Nombre</th>
+    //                     <th class="has-text-centered">Usuario</th>
+    //                     <th class="has-text-centered">Email</th>
+    //                     <th class="has-text-centered" colspan="3">Opciones</th>
+    //                 </tr>
+    //             </thead>
+    //             <tbody id="tablaDatos">
+    //     ';
 
-        if($total>=1 && $pagina<=$numeroPaginas){
-            $contador=$inicio+1;
-            $pag_inicio=$inicio+1;
-            foreach($datos as $rows){
-                $tabla .= '
-                <tr class="has-text-centered">
-                    <td class="has-text-centered">' . $contador . '</td>
-                    <td class="has-text-centered">
-                        <img class="is-rounded icono-imagen" src="' . APP_URL . 'app/views/fotos/' . $rows['photo'] . '" alt="Foto de Usuario" style="width: 50px; height: 50px; object-fit: cover;"/>
-                    </td>
-                    <td class="has-text-centered">' . $rows['nombre'] . ' ' . $rows['apellido'] . '</td>
-                    <td class="has-text-centered">' . $rows['username'] . '</td>
-                    <td class="has-text-centered">' . $rows['email'] . '</td>
-                    <td>
-                        <button type="button" class="button is-success is-rounded is-small" onclick="openUpdateModal(\'' . $rows['id'] . '\', \'' . htmlspecialchars($rows['nombre']) . '\', \'' . htmlspecialchars($rows['apellido']) . '\', \'' . htmlspecialchars($rows['username']) . '\', \'' . htmlspecialchars($rows['email']) . '\')">Actualizar</button>
-        </td>
-                    </td>
-                    <td>
-                        <form class="FormularioAjax" action="' . APP_URL . 'app/ajax/usuarioAjax.php" method="POST" autocomplete="off">
-                            <input type="hidden" name="modulo_usuario" value="eliminar">
-                            <input type="hidden" name="usuario_id" value="' . $rows['id'] . '">
-                            <button type="submit" class="button is-danger is-rounded is-small">Eliminar</button>
-                        </form>
-                    </td>
-                </tr>
-            ';
-                $contador++;
-            }
-            $pag_final=$contador-1;
-        }else{
-            if($total>=1){
-                $tabla.='
-                    <tr class="has-text-centered" >
-                        <td colspan="7">
-                            <a href="'.$url.'1/" class="button is-link is-rounded is-small mt-4 mb-4">
-                                Haga clic acá para recargar el listado
-                            </a>
-                        </td>
-                    </tr>
-                ';
-            }else{
-                $tabla.='
-                    <tr class="has-text-centered" >
-                        <td colspan="7">
-                            No hay registros en el sistema
-                        </td>
-                    </tr>
-                ';
-            }
-        }
+    //     if($total>=1 && $pagina<=$numeroPaginas){
+    //         $contador=$inicio+1;
+    //         $pag_inicio=$inicio+1;
+    //         foreach($datos as $rows){
+    //             $tabla .= '
+    //             <tr class="has-text-centered">
+    //                 <td class="has-text-centered">' . $contador . '</td>
+    //                 <td class="has-text-centered">
+    //                     <img class="is-rounded icono-imagen" src="' . APP_URL . 'app/views/fotos/' . $rows['photo'] . '" alt="Foto de Usuario" style="width: 50px; height: 50px; object-fit: cover;"/>
+    //                 </td>
+    //                 <td class="has-text-centered">' . $rows['nombre'] . ' ' . $rows['apellido'] . '</td>
+    //                 <td class="has-text-centered">' . $rows['username'] . '</td>
+    //                 <td class="has-text-centered">' . $rows['email'] . '</td>
+    //                 <td>
+    //                     <button type="button" class="button is-success is-rounded is-small" onclick="openUpdateModal(\'' . $rows['id'] . '\', \'' . htmlspecialchars($rows['nombre']) . '\', \'' . htmlspecialchars($rows['apellido']) . '\', \'' . htmlspecialchars($rows['username']) . '\', \'' . htmlspecialchars($rows['email']) . '\')">Actualizar</button>
+    //     </td>
+    //                 </td>
+    //                 <td>
+    //                     <form class="FormularioAjax" action="' . APP_URL . 'app/ajax/usuarioAjax.php" method="POST" autocomplete="off">
+    //                         <input type="hidden" name="modulo_usuario" value="eliminar">
+    //                         <input type="hidden" name="usuario_id" value="' . $rows['id'] . '">
+    //                         <button type="submit" class="button is-danger is-rounded is-small">Eliminar</button>
+    //                     </form>
+    //                 </td>
+    //             </tr>
+    //         ';
+    //             $contador++;
+    //         }
+    //         $pag_final=$contador-1;
+    //     }else{
+    //         if($total>=1){
+    //             $tabla.='
+    //                 <tr class="has-text-centered" >
+    //                     <td colspan="7">
+    //                         <a href="'.$url.'1/" class="button is-link is-rounded is-small mt-4 mb-4">
+    //                             Haga clic acá para recargar el listado
+    //                         </a>
+    //                     </td>
+    //                 </tr>
+    //             ';
+    //         }else{
+    //             $tabla.='
+    //                 <tr class="has-text-centered" >
+    //                     <td colspan="7">
+    //                         No hay registros en el sistema
+    //                     </td>
+    //                 </tr>
+    //             ';
+    //         }
+    //     }
 
-        $tabla.='</tbody></table></div>';
+    //     $tabla.='</tbody></table></div>';
 
-        ### Paginacion ###
-        if($total>0 && $pagina<=$numeroPaginas){
-            $tabla.='<p class="has-text-right">Mostrando usuarios <strong>'.$pag_inicio.'</strong> al <strong>'.$pag_final.'</strong> de un <strong>total de '.$total.'</strong></p>';
+    //     ### Paginacion ###
+    //     if($total>0 && $pagina<=$numeroPaginas){
+    //         $tabla.='<p class="has-text-right">Mostrando usuarios <strong>'.$pag_inicio.'</strong> al <strong>'.$pag_final.'</strong> de un <strong>total de '.$total.'</strong></p>';
 
-            $tabla.=$this->paginadorTablas($pagina,$numeroPaginas,$url,10);
-        }
+    //         $tabla.=$this->paginadorTablas($pagina,$numeroPaginas,$url,10);
+    //     }
 
-        return $tabla;
+    //     return $tabla;
+    // }
+    /*----------  Controlador listar usuario usuario  ----------*/
+    public function lista_usuarios(){
+         $consulta_datos="SELECT * FROM users WHERE id!='".$_SESSION['id']."' AND id!='1' ORDER BY nombre ASC";
+         $datos = $this->ejecutarConsulta($consulta_datos);// ejecutamos la consulta
+         $datos = $datos->fetchAll();
+        return $datos;
     }
     /*----------  Controlador eliminar usuario  ----------*/
     public function eliminarUsuarioControlador(){
@@ -734,7 +718,7 @@ class userController extends mainModel{
             "condicion_valor"=>$id
         ];
 
-        if($this->actualizarDatos1("users",$usuario_datos_up,$condicion)){
+        if($this->actualizarDatos("users",$usuario_datos_up,$condicion)){
             //SI LOS DATOS QUE ACTUALIZA SON DE LA SESSION AVERTA ACTUALIZAMOS 
             
             if($id==$_SESSION['id']){
@@ -761,7 +745,7 @@ class userController extends mainModel{
         return json_encode($alerta);
     }
     /*------------------modal actualizar-----------------------*/
-    public function actualizarUsuarioControlador1(){
+    public function actualizarUsuarioControladorModal(){
             // Procesa el formulario (por ejemplo, guarda los datos en la base de datos)
         $id=$this->limpiarCadena($_POST['id']);
         # Verificando usuario #
@@ -903,7 +887,7 @@ class userController extends mainModel{
             "condicion_valor"=>$id
         ];
 
-        if($this->actualizarDatos1("users",$usuario_datos_up,$condicion)){
+        if($this->actualizarDatos("users",$usuario_datos_up,$condicion)){
             //SI LOS DATOS QUE ACTUALIZA SON DE LA SESSION AVERTA ACTUALIZAMOS 
             
             if($id==$_SESSION['id']){
@@ -993,7 +977,7 @@ class userController extends mainModel{
             "condicion_valor"=>$id
         ];
 
-        if($this->actualizarDatos1("users",$usuario_datos_up,$condicion)){
+        if($this->actualizarDatos("users",$usuario_datos_up,$condicion)){
 
             if($id==$_SESSION['id']){
                 $_SESSION['foto']="";
@@ -1145,7 +1129,7 @@ class userController extends mainModel{
             "condicion_valor"=>$id
         ];
 
-        if($this->actualizarDatos1("users",$usuario_datos_up,$condicion)){
+        if($this->actualizarDatos("users",$usuario_datos_up,$condicion)){
 
             if($id==$_SESSION['id']){
                 $_SESSION['foto']=$foto;

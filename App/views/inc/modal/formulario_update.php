@@ -7,7 +7,7 @@
             <button class="delete is-large has-background-white" aria-label="close" onclick="closeUpdateModal()"></button>
         </header>
         <form id="updateFormModal" class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/usuarioAjax.php" method="POST" autocomplete="off">
-            <input type="hidden" name="modulo_usuario" value="actualizar1">
+            <input type="hidden" name="modulo_usuario" value="modal_usuario">
             <section class="modal-card-body">
                 <input type="hidden" name="id" id="userId">
                 <div class="field">

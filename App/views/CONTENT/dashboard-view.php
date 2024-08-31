@@ -46,12 +46,12 @@
                                 WHERE users.id = :user_id AND sessions.session_token = :session_token
                                 ";
                     // Parámetros para la consulta
-                    $params = [
+                    $paramas_consult = [
                         ':user_id' => $_SESSION['id'],
                         ':session_token' => $_SESSION['token']
                     ];
                     // Ejecutar la consulta
-                    $stmt = $check->ejecutarConsulta1($query, $params);
+                    $stmt = $check->ejecutarConsulta_con_parametros($query, $paramas_consult);
 
                     // Verificar el número de filas devueltas
                     if ($stmt->rowCount() == 1) {
@@ -74,20 +74,21 @@
                 <div class="column is-half">
                     <?php
                     $check = new mainModel();
+                    $id=$_SESSION['id'];
                     $query = "
                                 SELECT users.*, sessions.*
                                 FROM sessions
                                 JOIN users ON sessions.user_id = users.id
-                                WHERE users.id = :user_id
+                                WHERE users.id = $id 
                                 ORDER BY sessions.logout_time DESC
                                 LIMIT 1
                             ";
-                    $params = 
+                    $paramas_consult = 
                             [
                                 ':user_id' => $_SESSION['id'],
                             ];
                     // Ejecutar la consulta
-                    $stmt = $check->ejecutarConsulta1($query, $params);
+                    $stmt = $check->ejecutarConsulta($query);
 
                     // Verificar el número de filas devueltas
                     if ($stmt->rowCount() == 1) {
@@ -95,7 +96,7 @@
                         $datos = $stmt->fetch();
                         // Manejar los resultados
                         echo '<div class="notification is-warning">';
-                        echo '<h2 class="title">Hora del ultimo cierre de sesión::</h2>';
+                        echo '<h2 class="title">Hora del ultimo cierre de sesión:</h2>';
                         echo '<p class="subtitle">' . htmlspecialchars($datos['logout_time']) . '</p>';
                         echo '</div>';
 

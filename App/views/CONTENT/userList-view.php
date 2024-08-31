@@ -1,11 +1,3 @@
-<?PHP
-
-header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-header("Cache-Control: post-check=0, pre-check=0", false);
-header("Pragma: no-cache");
-?>
-
-
 <div class="container is-fluid mb-6">
     <h1 class="title">Usuarios</h1>
     <h2 class="subtitle">Lista de usuario</h2>
@@ -71,16 +63,59 @@ header("Pragma: no-cache");
                 </div>
             </div>
     </section>
-    <br>
-    <br>
+    
     <?php
+
     use App\Controller\userController;
+
     $insUsuario = new userController();
-    echo $insUsuario->listarUsuarioControlador($url[1], 5, $url[0], "");
+    $users = $insUsuario->lista_usuarios();
     ?>
-</div> 
-<?php  require_once "./App/views/inc/modal/formulario_update.php";?>
- <!-- fin modal -->
+    <div class="container">
+    <h2 class="title is-4 has-text-centered">Lista de Usuarios</h2>
+    <table id="miTabla" class="table is-bordered is-striped is-hoverable is-fullwidth">
+        <thead class="has-background-info">
+            <tr>
+                <th class="has-text-white">Cédula</th>
+                <th class="has-text-white has-text-centered">Foto</th>
+                <th class="has-text-white">Nombre</th>
+                <th class="has-text-white">Usuario</th>
+                <th class="has-text-white">Correo Electrónico</th>
+                <th class="has-text-white">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($users as $user): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($user['cedula']); ?></td>
+                    <td class="has-text-centered">
+                        <figure class="image is-64x64 is-inline-block">
+                            <img class="is-rounded" src="<?php echo APP_URL . 'app/views/fotos/' . htmlspecialchars($user['photo']); ?>" alt="Foto de Usuario" style="object-fit: cover;" />
+                        </figure>
+                    </td>
+                    <td><?php echo htmlspecialchars($user['nombre'])." ".htmlspecialchars($user['apellido']); ?></td>
+                    <td><?php echo htmlspecialchars($user['username']); ?></td>
+                    <td><?php echo htmlspecialchars($user['email']); ?></td>
+                    <td>
+                        <div class="buttons">
+                            <button type="button" class="button is-success is-rounded is-small" onclick="openUpdateModal('<?php echo htmlspecialchars($user['id']); ?>', '<?php echo htmlspecialchars($user['nombre']); ?>', '<?php echo htmlspecialchars($user['apellido']); ?>', '<?php echo htmlspecialchars($user['username']); ?>', '<?php echo htmlspecialchars($user['email']); ?>')">Actualizar</button>
+                            <form class="FormularioAjax" action="<?php echo APP_URL; ?>app/ajax/usuarioAjax.php" method="POST" autocomplete="off" style="display:inline;">
+                                <input type="hidden" name="modulo_usuario" value="eliminar">
+                                <input type="hidden" name="usuario_id" value="<?php echo htmlspecialchars($user['id']); ?>">
+                                <button type="submit" class="button is-danger is-rounded is-small">Eliminar</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+
+
+</div>
+<?php require_once "./App/views/inc/modal/formulario_update.php"; ?>
+<!-- fin modal -->
 <script>
     function filtrarTabla() {
         const nombreFiltro = document.getElementById('nombreFiltro').value.toLowerCase();
@@ -113,4 +148,9 @@ header("Pragma: no-cache");
             filas[i].style.display = mostrarFila ? '' : 'none';
         }
     }
+</script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#miTabla').DataTable();
+    });
 </script>

@@ -22,7 +22,6 @@ if(isset($_GET["views"])){
 }
 
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>

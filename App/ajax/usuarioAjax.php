@@ -20,8 +20,8 @@ if(isset($_POST['modulo_usuario'])){
     if($_POST['modulo_usuario']=="actualizar"){
         echo $insUsuario->actualizarUsuarioControlador();
     }
-    if($_POST['modulo_usuario']=="actualizar1"){
-        echo $insUsuario->actualizarUsuarioControlador1();
+    if($_POST['modulo_usuario']=="modal_usuario"){
+        echo $insUsuario->actualizarUsuarioControladorModal();
     }
 
     if($_POST['modulo_usuario']=="eliminarFoto"){
