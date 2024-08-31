@@ -14,9 +14,7 @@
                 <div class="field">
                     <label class="label">Cédula</label>
                     <div class="control has-icons-left">
-                        <input onkeypress="return SoloNumeros(event);" class="input" type="text" id="usuario_cedula"
-                            name="usuario_cedula" pattern="[0-9]{10,10}" minlength="10" maxlength="10"
-                            placeholder="Ingrese su cédula" required>
+                        <input onkeypress="return SoloNumeros(event);"class="input"type="text"id="usuario_cedula"name="usuario_cedula"pattern="[0-9]{10,10}"minlength="10"maxlength="10"placeholder="Ingrese su cédula"required onblur="validarCedula()">
                         <span class="icon is-small is-left">
                             <i class="fas fa-id-card"></i>
                         </span>
@@ -152,21 +150,21 @@
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-    const passwordInput = document.getElementById('usuario_clave_1');
-    const requirements = document.getElementById('password-requirements');
+        const passwordInput = document.getElementById('usuario_clave_1');
+        const requirements = document.getElementById('password-requirements');
 
-    // Mostrar los requisitos al hacer clic en el input
-    passwordInput.addEventListener('focus', function() {
-        requirements.style.display = 'block';
+        // Mostrar los requisitos al hacer clic en el input
+        passwordInput.addEventListener('focus', function() {
+            requirements.style.display = 'block';
+        });
+
+        // Ocultar los requisitos cuando se pierde el enfoque
+        passwordInput.addEventListener('blur', function() {
+            requirements.style.display = 'none';
+        });
     });
 
-    // Ocultar los requisitos cuando se pierde el enfoque
-    passwordInput.addEventListener('blur', function() {
-        requirements.style.display = 'none';
-    });
-});
-
-    document.getElementById('usuario_clave_1').addEventListener('input', function () {
+    document.getElementById('usuario_clave_1').addEventListener('input', function() {
         const clave = this.value;
         const claveError1 = document.getElementById('claveError1');
         const claveRegEx = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{7,18}$/;
@@ -183,7 +181,7 @@
         }
     });
 
-    document.getElementById('usuario_clave_2').addEventListener('input', function () {
+    document.getElementById('usuario_clave_2').addEventListener('input', function() {
         const clave1 = document.getElementById('usuario_clave_1').value;
         const clave2 = this.value;
         const claveError2 = document.getElementById('claveError2');
@@ -195,7 +193,7 @@
         }
     });
 
-    document.getElementById('registrationForm').addEventListener('submit', function (event) {
+    document.getElementById('registrationForm').addEventListener('submit', function(event) {
         if (!document.getElementById('cedulaError').classList.contains('is-hidden') ||
             !document.getElementById('cedulaExistenteError').classList.contains('is-hidden') ||
             !document.getElementById('claveError1').classList.contains('is-hidden') ||
@@ -205,4 +203,21 @@
             alert('Corrige los errores antes de enviar el formulario.');
         }
     });
+</script>
+<script>
+function validarCedula() {
+    var cedula = document.getElementById('usuario_cedula').value;
+    var cedulaError = document.getElementById('cedulaError');
+
+    // Expresión regular para verificar si hay 4 números consecutivos repetidos
+    var regex = /(.)\1{3}/;
+
+    if (regex.test(cedula)) {
+        cedulaError.classList.remove('is-hidden');
+        cedulaError.textContent = "La cédula no puede contener 4 números consecutivos iguales.";
+    } else {
+        cedulaError.classList.add('is-hidden');
+        cedulaError.textContent = "";
+    }
+}
 </script>
